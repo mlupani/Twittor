@@ -27,26 +27,19 @@ var txtMensaje  = $('#txtMensaje');
 // El usuario, contiene el ID del héroe seleccionado
 var usuario;
 
-window.onload = (e) => {
-	let deferredPrompt;
-	window.addEventListener("beforeinstallprompt", (e) => {
-		// Prevent Chrome 67 and earlier from automatically showing the prompt
-		e.preventDefault();
-		// Stash the event so it can be triggered later.
-		deferredPrompt = e;
+const fireAddToHomeScreenImpression = (event) => {
+	fireTracking("Add to homescreen shown");
+	//will not work for chrome, untill fixed
+	event.userChoice.then((choiceResult) => {
+		fireTracking(`User clicked ${choiceResult}`);
 	});
-	// Show the prompt
-	deferredPrompt.prompt();
-	// Wait for the user to respond to the prompt
-	deferredPrompt.userChoice.then((choiceResult) => {
-		if (choiceResult.outcome === "accepted") {
-			console.log("User accepted the A2HS prompt");
-		} else {
-			console.log("User dismissed the A2HS prompt");
-		}
-		deferredPrompt = null;
-	});
+	//This is to prevent `beforeinstallprompt` event that triggers again on `Add` or `Cancel` click
+	window.removeEventListener(
+		"beforeinstallprompt",
+		fireAddToHomeScreenImpression
+	);
 };
+window.addEventListener("beforeinstallprompt", fireAddToHomeScreenImpression);
 
 
 
