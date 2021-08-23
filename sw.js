@@ -54,9 +54,7 @@ self.addEventListener('fetch', e => {
     const resp = caches.match(e.request).then(res => {
         if(res) return res;
 		else{
-			return fetch(e.request, {
-				mode: "no-cors",
-			}).then((newRes) => {
+			return fetch(e.request).then((newRes) => {
 				return actualizarDynamic(DYNAMIC_CACHE, e.request, newRes);
 			});
 		}
