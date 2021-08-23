@@ -50,10 +50,11 @@ self.addEventListener('fetch', e => {
 
     const resp = caches.match(e.request).then(res => {
         if(res) return res;
-
-        return fetch(e.request).then(newRes => {
-            return actualizarDynamic(DYNAMIC_CACHE, e.request, newRes);
-        })
+		else{
+			return fetch(e.request).then(newRes => {
+				return actualizarDynamic(DYNAMIC_CACHE, e.request, newRes);
+			})
+		}
     })
 
     e.respondWith(resp);
